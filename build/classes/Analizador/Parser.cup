@@ -1,0 +1,51 @@
+package Analizador;
+import java_cup.runtime.*;
+import java.util.LinkedList;
+
+//-----------> Codigo para el parser
+//-----------> Declaracion de variables, funciones y funciones de error
+
+
+parser code
+{: //codigo visible, funciones 
+
+:}
+
+//----------> Codigo para las acciones gramaticales (no tocar) 
+
+
+//TERMINALES 
+terminal String LLA_IZQ,LLA_DER,MENOR_QUE,MAYOR_QUE,COMILLA_DOBLE,DOS_PUNTOS,COMA;
+terminal String ENTERO,DECIMAL,LETRA,ID,CADENA,CADENA1,SPACE,ENTER,CARACTER;
+
+//NO TERMINALES 
+non terminal inicial, lista_instruccion;
+non terminal miembro, par;
+non terminal declaracion, valor;
+
+
+//INICIA LA GRAMATICA
+start with inicial;
+
+
+//---------------->   Producciones   <-----------------------------------
+inicial ::= lista_instruccion
+;
+
+lista_instruccion ::= LLA_IZQ miembro LLA_DER
+;
+
+miembro ::= par 
+|par COMA miembro 
+;
+
+par ::= declaracion
+;
+
+declaracion ::= CADENA:x DOS_PUNTOS valor:val {:func.Funcion.archivosJson.put(x, val);:}
+;
+
+valor ::= DECIMAL:a  {: RESULT = a; :}
+|ENTERO:b  {: RESULT = b; :}
+|CADENA:c {: RESULT = c; :}
+;
