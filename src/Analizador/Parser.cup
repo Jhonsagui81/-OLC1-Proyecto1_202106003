@@ -42,7 +42,10 @@ miembro ::= par
 par ::= declaracion
 ;
 
-declaracion ::= CADENA:x DOS_PUNTOS valor:val {:func.Funcion.archivosJson.put(x, val);:}
+declaracion ::= CADENA:x DOS_PUNTOS valor:val {: 
+
+
+proyecto1.Proyecto1.carga(x, val.toString());:}
 ;
 
 valor ::= DECIMAL:a  {: RESULT = a; :}

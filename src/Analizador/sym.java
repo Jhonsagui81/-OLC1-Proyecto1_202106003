@@ -14,8 +14,8 @@ public class sym {
   public static final int LLA_IZQ = 2;
   public static final int MAYOR_QUE = 5;
   public static final int LLA_DER = 3;
-  public static final int ID = 12;
   public static final int ENTER = 16;
+  public static final int ID = 12;
   public static final int SPACE = 15;
   public static final int CADENA1 = 14;
   public static final int DOS_PUNTOS = 7;

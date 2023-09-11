@@ -3,6 +3,10 @@ package proyecto1;
 //importar las clases analizadores
 
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 
 
 
@@ -15,6 +19,9 @@ public class Proyecto1 {
     /**
      * @param args the command line arguments
      */
+    public static String file = "";
+    public static int contadorHash = 0;
+    
     public static void main(String[] args) {
         // TODO code application logic here
         String codigoFuente = """
@@ -36,7 +43,7 @@ public class Proyecto1 {
                               ~~
                               """;
 //        analizadores("src/Analizador/", "Scanner.jflex", "Parser.cup");
-        System.out.println("Este es el codigo fuente: " +codigoFuente);
+//        System.out.println("Este es el codigo fuente: " +codigoFuente);
         System.out.println("----------------------------------------");
 //        func.Funcion.lista.add("Hola");
 //        
@@ -44,13 +51,15 @@ public class Proyecto1 {
 //        func.Funcion.lista.forEach((elemento)->{
 //            System.out.println(elemento.toString());
 //        });
-        analizar(codigoFuente);
+       // analizar(codigoFuente);
         
-        System.out.println("----- Termino el analisis ------------------");
-        System.out.println("tokens de los json: ");
-        func.Funcion.archivosJson.forEach((t, u)-> {
-            System.out.println(t.toString() + "=" + u.toString());
-        });
+        
+        
+   
+                Interfaz.Pantalla Interfaz = new Interfaz.Pantalla();
+                Interfaz.setVisible(true);
+                
+                
     }
     
     public static void analizadores(String ruta, String jflexFile, String cupFile){
@@ -77,5 +86,21 @@ public class Proyecto1 {
             System.out.println("Error fatal en compilación de entrada.");
             System.out.println(e);
         } 
-    } 
+    }
+    
+    //Realizar analizar en la interfaz 
+    public static void compilarjson(String codigo, String files){
+        file = files;
+    }
+    
+    public static void carga(String x, String y){
+        HashMap<String, String> archivoDato = new HashMap<>();
+        archivoDato.put(x, y);
+        
+        List<HashMap<String, String>> archivosData = func.Funcion.archivosJson.getOrDefault(file, new ArrayList<>());
+        archivosData.add(archivoDato);
+
+        
+        func.Funcion.archivosJson.put(file, archivosData);
+    }
 }

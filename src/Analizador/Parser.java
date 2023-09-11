@@ -201,7 +201,10 @@ class CUP$Parser$actions {
 		int valleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Object val = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		func.Funcion.archivosJson.put(x, val);
+		 
+
+
+proyecto1.Proyecto1.carga(x, val.toString());
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("declaracion",4, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
