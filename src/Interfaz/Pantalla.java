@@ -190,6 +190,22 @@ public class Pantalla extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
+         //Extraer codigo fuente 
+        System.out.println("Inicia analisis statpy!!");
+        String codigoFuente = jTextArea1.getText();
+        
+        //Recolectar nombre del json
+        //Mandaar nombre del archivo 
+//        proyecto1.Proyecto1.compilarjson(codigoFuente, nombreFile);
+        //Creacion de analizador 
+//        proyecto1.Proyecto1.analizadores("src/statpy/", "Lexer.jflex", "Parser.cup");
+        //proyecto1.Proyecto1.analizadores("src/statpy/", "Lexer.jflex", "Parser.cup");
+        
+        //Ejecucion de analizadore 
+        proyecto1.Proyecto1.analizarP(codigoFuente);
+        
+        System.out.println("------------------TTermino analisis sp --------------------------------");
+        
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void assaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assaveActionPerformed

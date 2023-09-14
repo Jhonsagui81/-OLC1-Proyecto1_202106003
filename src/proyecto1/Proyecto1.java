@@ -24,45 +24,33 @@ public class Proyecto1 {
     
     public static void main(String[] args) {
         // TODO code application logic here
-        String codigoFuente = """
-                              {   
-                              //comentario inline
-                              "Titulo":1, 
-                              "variable":"titulo21",
-                              "maryin":2,
-                              /*
-                              comentario
-                              multi
-                              inline xd
-                              */
-                              "Tituloescd":"titulo barras",
-                              "titulo":35,  ``~~
-                              "Titulo1":45.2,
-                              "Titulo":78
-                              }
-                              ~~
-                              """;
-//        analizadores("src/Analizador/", "Scanner.jflex", "Parser.cup");
+       
+        analizadores("src/Analizador/", "Scanner.jflex", "Parser.cup");
+        analizadores("src/statpy/", "Lexer.jflex", "Parser.cup");
 //        System.out.println("Este es el codigo fuente: " +codigoFuente);
         System.out.println("----------------------------------------");
-//        func.Funcion.lista.add("Hola");
-//        
-        
-//        func.Funcion.lista.forEach((elemento)->{
-//            System.out.println(elemento.toString());
-//        });
-       // analizar(codigoFuente);
-        
-        
-        
-   
-                Interfaz.Pantalla Interfaz = new Interfaz.Pantalla();
-                Interfaz.setVisible(true);
-                
-                
+//       
+        //Generacion analizadores 
+        Interfaz.Pantalla Interfaz = new Interfaz.Pantalla();
+        Interfaz.setVisible(true);         
     }
     
     public static void analizadores(String ruta, String jflexFile, String cupFile){
+        try {
+            String opcionesJflex[] =  {ruta+jflexFile,"-d",ruta};
+            jflex.Main.generate(opcionesJflex);
+
+            String opcionesCup[] =  {"-destdir", ruta,"-parser","Parser",ruta+cupFile};
+            java_cup.Main.main(opcionesCup);
+            System.out.println("Se crearon los analizadores ");
+            
+        } catch (Exception e) {
+            System.out.println("No se ha podido generar los analizadores");
+            System.out.println(e);
+        }
+    }
+    
+    public static void analizadoresP(String ruta, String jflexFile, String cupFile){
         try {
             String opcionesJflex[] =  {ruta+jflexFile,"-d",ruta};
             jflex.Main.generate(opcionesJflex);
@@ -75,12 +63,23 @@ public class Proyecto1 {
             System.out.println(e);
         }
     }
-    
     //Realizar analisis
     public static void analizar (String entrada){
         try {
             Analizador.scanner scanner = new Analizador.scanner(new StringReader(entrada)); 
             Analizador.Parser parser = new Analizador.Parser(scanner);
+            parser.parse();
+        } catch (Exception e) {
+            System.out.println("Error fatal en compilación de entrada.");
+            System.out.println(e);
+            
+        } 
+    }
+    
+     public static void analizarP (String entrada){
+        try {
+            statpy.lexer scanner = new statpy.lexer(new StringReader(entrada)); 
+            statpy.Parser parser = new statpy.Parser(scanner);
             parser.parse();
         } catch (Exception e) {
             System.out.println("Error fatal en compilación de entrada.");

@@ -1,9 +1,9 @@
-package Analizador;
+package statpy;
 import java_cup.runtime.*;
 // importar arraylist
-import java.util.ArrayList;
+//import java.util.ArrayList;
 // importar clase de excepciones
-import Errores.Exception_;
+//import Errores.Exception_;
 
 
 //PARSER 
@@ -11,63 +11,221 @@ parser code
 {://Codigo visible
     
     // declarar un arraylist para los errores sintacticos 
-    public static ArrayList<Exception_ > erroresSintacticos = new ArrayList<Exception_>();
+    //public static ArrayList<Exception_ > erroresSintacticos = new ArrayList<Exception_>();
     
-    public void syntax_error(Symbol s){
+    //public void syntax_error(Symbol s){
         //System.out.println("Error R de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
-        erroresSintacticos.add(new Exception_("Sintáctico", "Error Recuperable de sintaxis: "+ s.value , Integer.toString(s.left), Integer.toString(s.right) ));
-    }
+      //  erroresSintacticos.add(new Exception_("Sintáctico", "Error Recuperable de sintaxis: "+ s.value , Integer.toString(s.left), Integer.toString(s.right) ));
+    //}
 
-    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+    //public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
         //System.out.println("Error NR de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
-        erroresSintacticos.add(new Exception_ ("Sintáctico", "Error No Recuperable de sintaxis: "+ s.value , Integer.toString(s.left), Integer.toString(s.right) ));
-    }
+      //  erroresSintacticos.add(new Exception_ ("Sintáctico", "Error No Recuperable de sintaxis: "+ s.value , Integer.toString(s.left), Integer.toString(s.right) ));
+    //}
 
 :}
 
 
-terminal String PTCOMA,PAR_IZQ,PAR_DER,COR_IZQ,COR_DER,LLAV_IZQ,LLAV_DER; // mismo nombre en el archivo lexico
-terminal String IGUAL;
+terminal String PTCOMA,PAR_IZQ,PAR_DER,COR_IZQ,COR_DER,LLAV_IZQ,LLAV_DER,MAYOR_QUE,MENOR_QUE,COMA,PUNTO,DOSPUNTOS,DOLLAR; // mismo nombre en el archivo lexico
+terminal String IGUAL, VACIO;
 terminal String MAS,MENOS,POR,DIV;
-terminal String ENTERO,DECIMAL,ID,LETRA,CADENA,CARACTER;
+terminal String ENTERO,DECIMAL,ID,CADENA;
 terminal String UMENOS;                             // para la precedencia para los negativos y no en 
-terminal String RVOID,RMAIN;
+terminal String RVOID,RMAIN, RDEFGLOBAL, RGRAFIBARRAS, RGRAFIPIE;
+terminal String RTITULO, REJEX, RVALOR, RTITULOX, RTITULOY;
 terminal String RINT,RDOUBLE,RCHAR,RSTRING,RBOOL;
+terminal String RIF,RTRUE, RFALSE, RNEWVALOR, RELSE, RSWITCH, RBREAK, RCASE, RDEFAU, RFOR, RWHILE, RDOWHILE, RCONSOLA, RWRITE;
+terminal String MAYOR_IGUAL, MENOR_IGUAL, COMPARADOR, DISTINTO, AND, OR, NOT;
 
-non terminal inicio,principal;                                   // terminales para las transiciones 
-non terminal instrucciones,instruccion;
-non terminal declaracion,tipoDato;
+//traduccion
+non terminal inicio,lista_instruccion;                                   // terminales para las transiciones 
+non terminal instruccion, imprimir, asignacion, if, switch, bloquescases, case, cbreak, for, while, do_while, void;
+non terminal declaracion,tipoDato, tipofuncion, main, defglobal, barras, gpie, condicion;
 non terminal expresion;
 
+//grafica globales
+non terminal lista_instruccion_grafica;
+non terminal instruccion_grafica, asignacion_grafica, tipo_dato_grafica;
+non terminal expresion_grafica;
 
+//grafica barras 
+non terminal lista_graf_barras;
+non terminal barras_instruccion, barra_titu, arreglo, arreglo_valor, arregloD, arreglo_Dvalor;
+
+//--------> PRECEDENCIA
+precedence left AND, OR;
+precedence right NOT;
+precedence left MAYOR_QUE, IGUAL, MENOR_QUE, MAYOR_IGUAL, MENOR_IGUAL, COMPARADOR, DISTINTO;
+precedence left MAS, MENOS;
+precedence left DIV, POR;
+precedence right UMENOS;
 
 
 start with inicio;                                     // iniciar la gramataica 
 
-inicio::=principal;                                // produccion inicial 
-principal::=RVOID RMAIN PAR_IZQ PAR_DER LLAV_IZQ instrucciones  LLAV_DER
+//--------------------> PRODUCCIONES <-----------------------------------
+inicio ::= lista_instruccion
+    //|lista_instruccion_grafica
 ;
 
-instrucciones::=instrucciones instruccion
-|instruccion
+//-------------------> PARA GRAFICAS <-------------------
+//globales
+lista_instruccion_grafica ::= lista_instruccion_grafica instruccion_grafica
+    |instruccion_grafica
+;
+
+instruccion_grafica ::= asignacion_grafica
+;
+
+asignacion_grafica ::= tipo_dato_grafica ID IGUAL expresion_grafica PTCOMA
+;
+
+tipo_dato_grafica ::= RSTRING
+    |RDOUBLE 
+;
+expresion_grafica ::= CADENA             
+    |DECIMAL
+    |ID
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA COMA CADENA LLAV_DER
 ;
 
 
-instruccion::= declaracion PTCOMA
-        | error PTCOMA
+//barras
+
+lista_graf_barras ::= lista_graf_barras barras_instruccion
+    |barras_instruccion
+;
+
+barras_instruccion ::= RSTRING RTITULO IGUAL barra_titu PTCOMA
+    |RSTRING COR_IZQ COR_DER REJEX IGUAL LLAV_IZQ arreglo:val LLAV_DER PTCOMA   {: System.out.println("Encontro: "+val); :}
+    |RDOUBLE COR_IZQ COR_DER RVALOR IGUAL LLAV_IZQ arregloD LLAV_DER PTCOMA
+    |RSTRING RTITULOX IGUAL barra_titu PTCOMA
+    |RSTRING RTITULOY IGUAL barra_titu PTCOMA
+; 
+
+barra_titu ::= CADENA
+    |ID
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA COMA CADENA LLAV_DER
+;
+
+arreglo ::= arreglo:b arreglo_valor:a {: RESULT = b.toString() + a.toString(); :}
+    |arreglo_valor:b      {:RESULT = b.toString(); :}
+;
+
+arreglo_valor ::= CADENA:a COMA:b       {:RESULT =a + b;:}
+    |CADENA:b       {:RESULT = b;:}
+    |ID:b           {:RESULT = b;:}
+    |ID:a COMA:b      {:RESULT = a+b;:}
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA COMA CADENA LLAV_DER COMA:b {:RESULT = b;:}
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA COMA CADENA LLAV_DER:b   {:RESULT = b;:}
+;
+
+arregloD ::= arregloD arreglo_Dvalor
+    |arreglo_Dvalor
+;
+
+arreglo_Dvalor ::= DECIMAL COMA
+    |DECIMAL
+    |ID COMA
+    |ID
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA COMA CADENA LLAV_DER COMA
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA COMA CADENA LLAV_DER 
+;
+
+//-------------------> PARA TRADUCCION <-------------------
+lista_instruccion ::= lista_instruccion instruccion
+    |instruccion 
+;
+
+instruccion ::= imprimir
+    |asignacion    
+    |void
+    |if
+    |switch
+    |for
+    |while
+    |do_while
+;
+
+imprimir ::= RCONSOLA PUNTO RWRITE PAR_IZQ expresion PAR_DER PTCOMA 
+;
+
+asignacion ::= tipoDato ID IGUAL expresion PTCOMA
+    |ID IGUAL expresion PTCOMA
+    |ID IGUAL expresion
+;
+
+tipoDato ::= RINT
+    |RDOUBLE
+    |RCHAR
+    |RSTRING  
+    |RBOOL
+;
+
+void ::= RVOID tipofuncion
+;
+
+tipofuncion ::= RMAIN PAR_IZQ PAR_DER LLAV_IZQ lista_instruccion LLAV_DER
+    |RDEFGLOBAL PAR_IZQ PAR_DER LLAV_IZQ lista_instruccion_grafica LLAV_DER
+    |RGRAFIBARRAS PAR_IZQ PAR_DER LLAV_IZQ lista_graf_barras LLAV_DER
+    |RGRAFIPIE PAR_IZQ PAR_DER LLAV_IZQ lista_graf_barras LLAV_DER
 ;
 
 
-declaracion::=tipoDato ID:a IGUAL expresion:b {:System.out.println("Declaración encontrada: "+a+" con valor: "+b) ;:}
+
+if ::= RIF PAR_IZQ expresion PAR_DER LLAV_IZQ lista_instruccion LLAV_DER
+    |RIF PAR_IZQ expresion PAR_DER LLAV_IZQ lista_instruccion LLAV_DER RELSE LLAV_IZQ lista_instruccion LLAV_DER
+    |RIF PAR_IZQ expresion PAR_DER LLAV_IZQ lista_instruccion LLAV_DER RELSE if
 ;
 
-expresion::=ENTERO:a  {: RESULT = a; :}
-|DECIMAL  
+switch ::= RSWITCH PAR_IZQ ID PAR_DER LLAV_IZQ bloquescases LLAV_DER
 ;
 
-tipoDato::=RINT
-|RDOUBLE
-|RCHAR
-|RSTRING
-|RBOOL
+bloquescases ::= bloquescases  case  //lista_instruccion cbreak
+    |case
+;
+
+case ::= RCASE ENTERO DOSPUNTOS lista_instruccion cbreak
+    |RDEFAU DOSPUNTOS lista_instruccion cbreak
+;
+
+cbreak ::= RBREAK PTCOMA
+;
+
+for ::= RFOR PAR_IZQ asignacion expresion PTCOMA condicion PAR_DER LLAV_IZQ lista_instruccion LLAV_DER  
+;
+
+condicion ::= asignacion
+    |ID MAS MAS
+    |ID MENOS MENOS
+;
+
+while ::= RWHILE PAR_IZQ expresion PAR_DER LLAV_IZQ lista_instruccion LLAV_DER 
+;
+
+do_while ::= asignacion RDOWHILE LLAV_IZQ lista_instruccion LLAV_DER RWHILE PAR_IZQ expresion PAR_DER PTCOMA
+;
+
+
+expresion ::= expresion MAS expresion
+    |expresion MENOS expresion
+    |expresion POR expresion
+    |expresion DIV expresion
+    |expresion MAYOR_QUE expresion
+    |expresion MENOR_QUE expresion
+    |expresion MAYOR_IGUAL expresion
+    |expresion MENOR_IGUAL expresion
+    |expresion COMPARADOR expresion
+    |expresion DISTINTO expresion
+    |expresion IGUAL expresion
+    |expresion AND expresion
+    |expresion OR expresion
+    |NOT expresion
+    |MENOS expresion    %prec UMENOS 
+    |ENTERO    
+    |CADENA             
+    |DECIMAL
+    |RTRUE
+    |RFALSE
+    |ID
 ;
