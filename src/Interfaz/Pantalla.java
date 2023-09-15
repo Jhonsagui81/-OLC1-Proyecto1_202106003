@@ -65,6 +65,7 @@ public class Pantalla extends javax.swing.JFrame {
 
         jLabel1.setText("Entrada");
 
+        jTextArea2.setEditable(false);
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
         jScrollPane2.setViewportView(jTextArea2);
@@ -205,7 +206,7 @@ public class Pantalla extends javax.swing.JFrame {
         proyecto1.Proyecto1.analizarP(codigoFuente);
         
         System.out.println("------------------TTermino analisis sp --------------------------------");
-        
+        jTextArea2.setText(func.Funcion.codigo);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void assaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assaveActionPerformed

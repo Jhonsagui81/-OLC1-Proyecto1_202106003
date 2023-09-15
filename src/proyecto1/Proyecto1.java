@@ -24,12 +24,13 @@ public class Proyecto1 {
     
     public static void main(String[] args) {
         // TODO code application logic here
-       
+//        String va = "print(" + a. + ");";
+        func.Funcion.contadorCase++;
         analizadores("src/Analizador/", "Scanner.jflex", "Parser.cup");
         analizadores("src/statpy/", "Lexer.jflex", "Parser.cup");
 //        System.out.println("Este es el codigo fuente: " +codigoFuente);
         System.out.println("----------------------------------------");
-//       
+        
         //Generacion analizadores 
         Interfaz.Pantalla Interfaz = new Interfaz.Pantalla();
         Interfaz.setVisible(true);         

@@ -60,7 +60,7 @@ PTCOMA      = ";"
 COMA        = ","
 PUNTO       = "."
 DOSPUNTOS   = ":"
-VACIO = ""
+//VACIO = ""
 MAS = "+"
 MENOS = "-"
 POR = "*"
@@ -155,7 +155,7 @@ RTITULOY = "TituloY"
 <YYINITIAL> {DOSPUNTOS}    {   return new Symbol(sym.DOSPUNTOS, yyline, yycolumn,yytext());   }
 <YYINITIAL> {RTRUE}    {   return new Symbol(sym.RTRUE, yyline, yycolumn,yytext());   }
 <YYINITIAL> {RFALSE}    {   return new Symbol(sym.RFALSE, yyline, yycolumn,yytext());   }
-<YYINITIAL> {VACIO}    {   return new Symbol(sym.VACIO, yyline, yycolumn,yytext());   }
+//<YYINITIAL> {VACIO}    {   return new Symbol(sym.VACIO, yyline, yycolumn,yytext());   }
 
 //<YYINITIAL> {COMILLA_SIMPLE}    {   return new Symbol(sym.COMILLA_SIMPLE, yyline, yycolumn,yytext());   }
 //<YYINITIAL> {COMILLA_DOBLE}    {   return new Symbol(sym.COMILLA_DOBLE, yyline, yycolumn,yytext());   }

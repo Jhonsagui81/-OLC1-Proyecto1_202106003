@@ -8,68 +8,67 @@ package statpy;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int RVALOR = 33;
+  public static final int RVALOR = 32;
   public static final int PAR_DER = 4;
   public static final int DOSPUNTOS = 13;
-  public static final int DISTINTO = 58;
-  public static final int COMPARADOR = 57;
-  public static final int RSTRING = 39;
-  public static final int RTRUE = 42;
-  public static final int RWHILE = 51;
-  public static final int POR = 19;
-  public static final int RDOWHILE = 52;
-  public static final int ENTERO = 21;
-  public static final int RVOID = 26;
-  public static final int RDEFGLOBAL = 28;
+  public static final int DISTINTO = 57;
+  public static final int COMPARADOR = 56;
+  public static final int RSTRING = 38;
+  public static final int RTRUE = 41;
+  public static final int RWHILE = 50;
+  public static final int POR = 18;
+  public static final int RDOWHILE = 51;
+  public static final int ENTERO = 20;
+  public static final int RVOID = 25;
+  public static final int RDEFGLOBAL = 27;
   public static final int COR_DER = 6;
-  public static final int RFALSE = 43;
-  public static final int RGRAFIPIE = 30;
-  public static final int RELSE = 45;
-  public static final int NOT = 61;
-  public static final int AND = 59;
+  public static final int RFALSE = 42;
+  public static final int RGRAFIPIE = 29;
+  public static final int RELSE = 44;
+  public static final int NOT = 60;
+  public static final int AND = 58;
   public static final int IGUAL = 15;
-  public static final int OR = 60;
-  public static final int RDOUBLE = 37;
-  public static final int DIV = 20;
-  public static final int UMENOS = 25;
-  public static final int RCONSOLA = 53;
+  public static final int OR = 59;
+  public static final int RDOUBLE = 36;
+  public static final int DIV = 19;
+  public static final int UMENOS = 24;
+  public static final int RCONSOLA = 52;
   public static final int LLAV_IZQ = 7;
-  public static final int ID = 23;
+  public static final int ID = 22;
   public static final int EOF = 0;
-  public static final int DECIMAL = 22;
+  public static final int DECIMAL = 21;
   public static final int error = 1;
   public static final int COMA = 11;
-  public static final int CADENA = 24;
-  public static final int MENOS = 18;
-  public static final int RWRITE = 54;
+  public static final int CADENA = 23;
+  public static final int MENOS = 17;
+  public static final int RWRITE = 53;
   public static final int MAYOR_QUE = 9;
-  public static final int RTITULO = 31;
+  public static final int RTITULO = 30;
   public static final int PAR_IZQ = 3;
-  public static final int RCHAR = 38;
-  public static final int RTITULOY = 35;
-  public static final int RTITULOX = 34;
-  public static final int RCASE = 48;
+  public static final int RCHAR = 37;
+  public static final int RTITULOY = 34;
+  public static final int RTITULOX = 33;
+  public static final int RCASE = 47;
   public static final int PUNTO = 12;
-  public static final int VACIO = 16;
   public static final int DOLLAR = 14;
-  public static final int MAYOR_IGUAL = 55;
-  public static final int RNEWVALOR = 44;
+  public static final int MAYOR_IGUAL = 54;
+  public static final int RNEWVALOR = 43;
   public static final int COR_IZQ = 5;
-  public static final int RDEFAU = 49;
+  public static final int RDEFAU = 48;
   public static final int PTCOMA = 2;
-  public static final int RSWITCH = 46;
-  public static final int RINT = 36;
+  public static final int RSWITCH = 45;
+  public static final int RINT = 35;
   public static final int LLAV_DER = 8;
-  public static final int REJEX = 32;
+  public static final int REJEX = 31;
   public static final int MENOR_QUE = 10;
-  public static final int MENOR_IGUAL = 56;
-  public static final int RFOR = 50;
-  public static final int RBOOL = 40;
-  public static final int RGRAFIBARRAS = 29;
-  public static final int RBREAK = 47;
-  public static final int RIF = 41;
-  public static final int MAS = 17;
-  public static final int RMAIN = 27;
+  public static final int MENOR_IGUAL = 55;
+  public static final int RFOR = 49;
+  public static final int RBOOL = 39;
+  public static final int RGRAFIBARRAS = 28;
+  public static final int RBREAK = 46;
+  public static final int RIF = 40;
+  public static final int MAS = 16;
+  public static final int RMAIN = 26;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -87,7 +86,6 @@ public class sym {
   "DOSPUNTOS",
   "DOLLAR",
   "IGUAL",
-  "VACIO",
   "MAS",
   "MENOS",
   "POR",
