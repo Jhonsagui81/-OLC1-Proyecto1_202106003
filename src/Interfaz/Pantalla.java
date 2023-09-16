@@ -55,7 +55,11 @@ public class Pantalla extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -161,10 +165,34 @@ public class Pantalla extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Ejecutar");
+        jMenu3.setText("Graficas");
+
+        jMenuItem1.setText("Barras");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem1);
+
+        jMenuItem2.setText("Pie");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem2);
+
         jMenuBar1.add(jMenu3);
 
         jMenu4.setText("Reporte");
+
+        jMenuItem3.setText("TOKENS");
+        jMenu4.add(jMenuItem3);
+
+        jMenuItem6.setText("ERRORES");
+        jMenu4.add(jMenuItem6);
+
         jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
@@ -190,7 +218,18 @@ public class Pantalla extends javax.swing.JFrame {
     }//GEN-LAST:event_ArchivoMouseClicked
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        // TODO add your handling code here:
+        // Limpiar listas par barras:
+        func.Funcion.EjeX.clear();
+        func.Funcion.Titulo.clear();
+        func.Funcion.TituloX.clear();
+        func.Funcion.TituloY.clear();
+        func.Funcion.Valores.clear();
+        // Limpiar Listas para Pie
+        func.Funcion.EjeX_pie.clear();
+        func.Funcion.Titulo_pie.clear();
+        func.Funcion.Valores_pie.clear();
+        
+        
          //Extraer codigo fuente 
         System.out.println("Inicia analisis statpy!!");
         String codigoFuente = jTextArea1.getText();
@@ -207,6 +246,8 @@ public class Pantalla extends javax.swing.JFrame {
         
         System.out.println("------------------TTermino analisis sp --------------------------------");
         jTextArea2.setText(func.Funcion.codigo);
+        System.out.println("-----------------Nuestra Dtos grafica --------------------------------");
+        func.Funcion.mostrarDataBarras();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void assaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assaveActionPerformed
@@ -280,6 +321,19 @@ public class Pantalla extends javax.swing.JFrame {
         System.out.println("tokens de los json: ");
         func.Funcion.mostrar();
     }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        //GRAFICA DE BARRAAAS
+        Grafica.Barras grafica_barras = new Grafica.Barras();
+        grafica_barras.setVisible(true); 
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        Grafica.Pie grafica_Pie = new Grafica.Pie();
+        grafica_Pie.setVisible(true); 
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
     
     public void saveAs(){
         JFileChooser fileChooser = new JFileChooser();
@@ -324,8 +378,12 @@ public class Pantalla extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

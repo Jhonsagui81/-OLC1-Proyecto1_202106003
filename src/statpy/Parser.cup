@@ -52,6 +52,10 @@ non terminal expresion_grafica;
 non terminal lista_graf_barras;
 non terminal barras_instruccion, barra_titu, arreglo, arreglo_valor, arregloD, arreglo_Dvalor;
 
+//grafica pie 
+non terminal lista_graf_pie;
+non terminal pie_instruccion, pie_titu, arreglo_pie, arreglo_pie_valor, arreglo_pie_D, arreglo_pie_Dvalor;
+
 //--------> PRECEDENCIA
 precedence left AND, OR;
 precedence right NOT;
@@ -77,16 +81,31 @@ lista_instruccion_grafica ::= lista_instruccion_grafica instruccion_grafica
 instruccion_grafica ::= asignacion_grafica
 ;
 
-asignacion_grafica ::= tipo_dato_grafica ID IGUAL expresion_grafica PTCOMA
+asignacion_grafica ::= tipo_dato_grafica ID:a IGUAL expresion_grafica:b PTCOMA
+{:  
+    func.Funcion.variablesGlobales.put(a, b.toString());
+    //System.out.println("Clave: "+a+" , Valor: "+b)  ;  //TABLA DE SIMBOLOS PARA GRAFICAS 
+:}
 ;
 
 tipo_dato_grafica ::= RSTRING
     |RDOUBLE 
 ;
-expresion_grafica ::= CADENA             
-    |DECIMAL
-    |ID
-    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA COMA CADENA LLAV_DER
+expresion_grafica ::= CADENA:a      {: RESULT = a; :}       
+    |DECIMAL:a                      {: RESULT = a; :}
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA:a COMA CADENA:b LLAV_DER   
+{:
+    
+    String archivo = a.toString();
+    String newArchi = archivo.substring(1);
+    newArchi = newArchi.substring(0, newArchi.length() - 1);
+
+
+    String clave = b.toString();
+
+
+    RESULT = func.Funcion.buscaEstruc(newArchi, clave);
+:}
 ;
 
 
@@ -96,41 +115,264 @@ lista_graf_barras ::= lista_graf_barras barras_instruccion
     |barras_instruccion
 ;
 
-barras_instruccion ::= RSTRING RTITULO IGUAL barra_titu PTCOMA
-    |RSTRING COR_IZQ COR_DER REJEX IGUAL LLAV_IZQ arreglo:val LLAV_DER PTCOMA   {: System.out.println("Encontro: "+val); :}
-    |RDOUBLE COR_IZQ COR_DER RVALOR IGUAL LLAV_IZQ arregloD LLAV_DER PTCOMA
-    |RSTRING RTITULOX IGUAL barra_titu PTCOMA
-    |RSTRING RTITULOY IGUAL barra_titu PTCOMA
+barras_instruccion ::= RSTRING RTITULO:a IGUAL barra_titu:b PTCOMA    //tengo titulo y valor 
+        {:
+            func.Funcion.Titulo.add(b.toString());
+            func.Funcion.Hash_barras.put(a.toString(), func.Funcion.Titulo);
+            System.out.println("Clave: "+a.toString()+", Valor:"+b.toString());
+        :}
+    |RSTRING COR_IZQ COR_DER REJEX:a IGUAL LLAV_IZQ arreglo LLAV_DER PTCOMA   
+        {:
+            func.Funcion.Hash_barras.put(a.toString(), func.Funcion.EjeX);
+        :}
+    |RDOUBLE COR_IZQ COR_DER RVALOR:a IGUAL LLAV_IZQ arregloD LLAV_DER PTCOMA   
+        {:
+            func.Funcion.Hash_barras.put(a.toString(), func.Funcion.Valores);
+        :}
+    |RSTRING RTITULOX:a IGUAL barra_titu:b PTCOMA       ///PENDIENTE AQUI 
+        {:
+            func.Funcion.TituloX.add(b.toString());
+            func.Funcion.Hash_barras.put(a.toString(), func.Funcion.TituloX);
+            System.out.println("Clave: "+a.toString()+", Valor:"+b.toString());
+        :}
+    |RSTRING RTITULOY:a IGUAL barra_titu:b PTCOMA
+        {:
+            func.Funcion.TituloY.add(b.toString());
+            func.Funcion.Hash_barras.put(a.toString(), func.Funcion.TituloY);
+            System.out.println("Clave: "+a.toString()+", Valor:"+b.toString());
+        :}
 ; 
 
-barra_titu ::= CADENA
-    |ID
-    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA COMA CADENA LLAV_DER
+barra_titu ::= CADENA:a                 {:  RESULT = a; :}
+    |ID:a                               {:  RESULT = func.Funcion.buscaIdGlobal(a.toString()); :}
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA:a COMA CADENA:b LLAV_DER
+{:
+    String archivo = a.toString();
+    String newArchi = archivo.substring(1);
+    newArchi = newArchi.substring(0, newArchi.length() - 1);
+
+
+    String clave = b.toString();
+
+
+    RESULT = func.Funcion.buscaEstruc(newArchi, clave);
+:}
 ;
 
-arreglo ::= arreglo:b arreglo_valor:a {: RESULT = b.toString() + a.toString(); :}
-    |arreglo_valor:b      {:RESULT = b.toString(); :}
+arreglo ::= arreglo:b arreglo_valor:a       ///ciclo para lista de valores 
+    {:
+        func.Funcion.EjeX.add(a.toString());
+        System.out.println("->prime Arrgle: "+ a.toString() );
+        RESULT = b.toString() + a.toString();
+    :}
+    |arreglo_valor:b      
+    {:
+        func.Funcion.EjeX.add(b.toString());
+        System.out.println("->segundo Arrgle: "+b.toString());
+        RESULT = b.toString(); 
+    :}
 ;
 
-arreglo_valor ::= CADENA:a COMA:b       {:RESULT =a + b;:}
+arreglo_valor ::= CADENA:a COMA       {:RESULT = a;:}
     |CADENA:b       {:RESULT = b;:}
-    |ID:b           {:RESULT = b;:}
-    |ID:a COMA:b      {:RESULT = a+b;:}
-    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA COMA CADENA LLAV_DER COMA:b {:RESULT = b;:}
-    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA COMA CADENA LLAV_DER:b   {:RESULT = b;:}
+    |ID:a           {:RESULT = func.Funcion.buscaIdGlobal(a); :}  //SE DEBE HACER BUSQUEDA EN LA TABLA Y ASIGNARLE ESE VALOR 
+    |ID:a COMA:b      {:RESULT = func.Funcion.buscaIdGlobal(a); :}
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA:a COMA CADENA:b LLAV_DER COMA 
+        {:
+            String archivo = a.toString();
+            String newArchi = archivo.substring(1);
+            newArchi = newArchi.substring(0, newArchi.length() - 1);
+
+
+            String clave = b.toString();
+
+
+            RESULT = func.Funcion.buscaEstruc(newArchi, clave);
+        :}
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA:a COMA CADENA:b LLAV_DER 
+        {:
+            String archivo = a.toString();
+            String newArchi = archivo.substring(1);
+            newArchi = newArchi.substring(0, newArchi.length() - 1);
+
+
+            String clave = b.toString();
+
+
+            RESULT = func.Funcion.buscaEstruc(newArchi, clave);
+        :}
 ;
 
-arregloD ::= arregloD arreglo_Dvalor
-    |arreglo_Dvalor
+arregloD ::= arregloD:b arreglo_Dvalor:a
+    {:
+        func.Funcion.Valores.add(a.toString());
+        System.out.println("->prime Arrgle: "+ a.toString() );
+        RESULT = b.toString() + a.toString();
+    :}
+    |arreglo_Dvalor:b
+    {:
+        func.Funcion.Valores.add(b.toString());
+        System.out.println("->segundo Arrgle: "+b.toString());
+        RESULT = b.toString(); 
+    :}
 ;
 
-arreglo_Dvalor ::= DECIMAL COMA
-    |DECIMAL
-    |ID COMA
-    |ID
-    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA COMA CADENA LLAV_DER COMA
-    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA COMA CADENA LLAV_DER 
+arreglo_Dvalor ::= DECIMAL:a COMA       {: RESULT = a; :}
+    |DECIMAL:a                          {: RESULT = a; :}
+    |ID:a COMA                          {: RESULT = func.Funcion.buscaIdGlobal(a); :}    
+    |ID:a                               {: RESULT = func.Funcion.buscaIdGlobal(a); :}
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA:a COMA CADENA:b LLAV_DER COMA
+        {:
+        String archivo = a.toString();
+        String newArchi = archivo.substring(1);
+        newArchi = newArchi.substring(0, newArchi.length() - 1);
+
+
+        String clave = b.toString();
+
+
+        RESULT = func.Funcion.buscaEstruc(newArchi, clave);
+        :}
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA:a COMA CADENA:b LLAV_DER 
+        {:
+        String archivo = a.toString();
+        String newArchi = archivo.substring(1);
+        newArchi = newArchi.substring(0, newArchi.length() - 1);
+
+
+        String clave = b.toString();
+
+
+        RESULT = func.Funcion.buscaEstruc(newArchi, clave);
+        :}
 ;
+
+///Pie 
+lista_graf_pie ::= lista_graf_pie pie_instruccion
+    |pie_instruccion
+;
+
+pie_instruccion ::= RSTRING RTITULO:a IGUAL pie_titu:b PTCOMA    //tengo titulo y valor 
+        {:
+            func.Funcion.Titulo_pie.add(b.toString());
+            func.Funcion.Hash_pie.put(a.toString(), func.Funcion.Titulo_pie);
+            System.out.println("Clave: "+a.toString()+", Valor:"+b.toString());
+        :}
+    |RSTRING COR_IZQ COR_DER REJEX:a IGUAL LLAV_IZQ arreglo_pie LLAV_DER PTCOMA   
+        {:
+            func.Funcion.Hash_pie.put(a.toString(), func.Funcion.EjeX_pie);
+        :}
+    |RDOUBLE COR_IZQ COR_DER RVALOR:a IGUAL LLAV_IZQ arreglo_pie_D LLAV_DER PTCOMA   
+        {:
+            func.Funcion.Hash_pie.put(a.toString(), func.Funcion.Valores_pie);
+        :}
+; 
+
+pie_titu ::= CADENA:a                 {:  RESULT = a; :}
+    |ID:a                               {:  RESULT = func.Funcion.buscaIdGlobal(a.toString()); :}
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA:a COMA CADENA:b LLAV_DER
+{:
+    String archivo = a.toString();
+    String newArchi = archivo.substring(1);
+    newArchi = newArchi.substring(0, newArchi.length() - 1);
+
+
+    String clave = b.toString();
+
+
+    RESULT = func.Funcion.buscaEstruc(newArchi, clave);
+:}
+;
+
+arreglo_pie ::= arreglo_pie:b arreglo_pie_valor:a       ///ciclo para lista de valores 
+    {:
+        func.Funcion.EjeX_pie.add(a.toString());
+        System.out.println("->prime Arrgle: "+ a.toString() );
+        RESULT = b.toString() + a.toString();
+    :}
+    |arreglo_pie_valor:b      
+    {:
+        func.Funcion.EjeX_pie.add(b.toString());
+        System.out.println("->segundo Arrgle: "+b.toString());
+        RESULT = b.toString(); 
+    :}
+;
+
+arreglo_pie_valor ::= CADENA:a COMA       {:RESULT = a;:}
+    |CADENA:b       {:RESULT = b;:}
+    |ID:a           {:RESULT = func.Funcion.buscaIdGlobal(a); :}  //SE DEBE HACER BUSQUEDA EN LA TABLA Y ASIGNARLE ESE VALOR 
+    |ID:a COMA:b      {:RESULT = func.Funcion.buscaIdGlobal(a); :}
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA:a COMA CADENA:b LLAV_DER COMA 
+        {:
+            String archivo = a.toString();
+            String newArchi = archivo.substring(1);
+            newArchi = newArchi.substring(0, newArchi.length() - 1);
+
+
+            String clave = b.toString();
+
+
+            RESULT = func.Funcion.buscaEstruc(newArchi, clave);
+        :}
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA:a COMA CADENA:b LLAV_DER 
+        {:
+            String archivo = a.toString();
+            String newArchi = archivo.substring(1);
+            newArchi = newArchi.substring(0, newArchi.length() - 1);
+
+
+            String clave = b.toString();
+
+
+            RESULT = func.Funcion.buscaEstruc(newArchi, clave);
+        :}
+;
+
+arreglo_pie_D ::= arreglo_pie_D:b arreglo_pie_Dvalor:a
+    {:
+        func.Funcion.Valores_pie.add(a.toString());
+        System.out.println("->prime Arrgle: "+ a.toString() );
+        RESULT = b.toString() + a.toString();
+    :}
+    |arreglo_pie_Dvalor:b
+    {:
+        func.Funcion.Valores_pie.add(b.toString());
+        System.out.println("->segundo Arrgle: "+b.toString());
+        RESULT = b.toString(); 
+    :}
+;
+
+arreglo_pie_Dvalor ::= DECIMAL:a COMA       {: RESULT = a; :}
+    |DECIMAL:a                          {: RESULT = a; :}
+    |ID:a COMA                          {: RESULT = func.Funcion.buscaIdGlobal(a); :}    
+    |ID:a                               {: RESULT = func.Funcion.buscaIdGlobal(a); :}
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA:a COMA CADENA:b LLAV_DER COMA
+        {:
+        String archivo = a.toString();
+        String newArchi = archivo.substring(1);
+        newArchi = newArchi.substring(0, newArchi.length() - 1);
+
+
+        String clave = b.toString();
+
+
+        RESULT = func.Funcion.buscaEstruc(newArchi, clave);
+        :}
+    |DOLLAR LLAV_IZQ RNEWVALOR COMA CADENA:a COMA CADENA:b LLAV_DER 
+        {:
+        String archivo = a.toString();
+        String newArchi = archivo.substring(1);
+        newArchi = newArchi.substring(0, newArchi.length() - 1);
+
+
+        String clave = b.toString();
+
+
+        RESULT = func.Funcion.buscaEstruc(newArchi, clave);
+        :}
+;
+
+
 
 //-------------------> PARA TRADUCCION <-------------------
 lista_instruccion ::= lista_instruccion:a instruccion:b     {: RESULT = a.toString() + b.toString(); :}
@@ -191,7 +433,7 @@ tipofuncion ::= RMAIN PAR_IZQ PAR_DER LLAV_IZQ lista_instruccion:a LLAV_DER
 :}
     |RDEFGLOBAL PAR_IZQ PAR_DER LLAV_IZQ lista_instruccion_grafica LLAV_DER     {: RESULT = ""; :}
     |RGRAFIBARRAS PAR_IZQ PAR_DER LLAV_IZQ lista_graf_barras LLAV_DER           {: RESULT = ""; :}
-    |RGRAFIPIE PAR_IZQ PAR_DER LLAV_IZQ lista_graf_barras LLAV_DER              {: RESULT = ""; :}
+    |RGRAFIPIE PAR_IZQ PAR_DER LLAV_IZQ lista_graf_pie LLAV_DER              {: RESULT = ""; :}    //PENDIENTEEEEEEEE
 ;
 
 

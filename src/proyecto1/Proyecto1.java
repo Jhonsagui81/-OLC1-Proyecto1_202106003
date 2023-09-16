@@ -84,6 +84,7 @@ public class Proyecto1 {
             parser.parse();
         } catch (Exception e) {
             System.out.println("Error fatal en compilación de entrada.");
+            func.Funcion.Hash_barras.put("", func.Funcion.TituloY);
             System.out.println(e);
         } 
     }
