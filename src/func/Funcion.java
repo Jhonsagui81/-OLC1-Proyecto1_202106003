@@ -2,11 +2,13 @@ package func;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import javax.swing.JOptionPane;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.*;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  *
@@ -24,6 +26,35 @@ public class Funcion {
     public static int contadorCase = 0;
     //Para almacenar codigo traducido 
     public static String codigo = "";
+    //Para tener control de la tabulacion
+    public static LinkedList<String> pila = new LinkedList<>();
+    
+   public static void agregarTab(String x){
+       if (x.equals("{")){
+           System.out.println("SE AGERGASS \\t");
+           pila.add("\t");
+       }else{
+           System.out.println("NO COINCIDE {");
+       }
+   }
+   
+   public static void EliminarTab(String x){
+       if (x.equals("}")){
+           pila.pop();
+       }
+   }
+   
+   public static String retornTabs(){
+       String tabs = "";
+       Iterator<String> iterador = pila.iterator();
+       while (iterador.hasNext()) {
+            String elemento = iterador.next();
+            System.out.println("El elemento a conatenar es: "+elemento);
+            
+        }
+       System.out.println("Lo que se retorna es: "+tabs);
+       return tabs;
+   }
     
     public static LinkedList<Object> lista = new LinkedList<>();
     
@@ -143,6 +174,8 @@ public class Funcion {
     public static List<String> Titulo_pie = new ArrayList<>();
     public static List<String> EjeX_pie = new ArrayList<>();
     public static List<String> Valores_pie = new ArrayList<>();
+    
+    
     
     public static int PorcionesGraficaPie(){
         int columnas = 0;

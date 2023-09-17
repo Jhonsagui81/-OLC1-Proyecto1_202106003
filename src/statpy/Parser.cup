@@ -379,9 +379,9 @@ lista_instruccion ::= lista_instruccion:a instruccion:b     {: RESULT = a.toStri
     |instruccion: a                                        {: RESULT = a.toString(); :}
 ;
 
-instruccion ::= imprimir:a    {: RESULT = a; :}
-    |asignacion:a               {: RESULT = a; :}
-    |void:a                     {: RESULT = a; :}
+instruccion ::=  void:a                     {: RESULT = a; :}
+    |imprimir:a    {: RESULT = a; :}
+    |asignacion:a               {: RESULT = a; :} 
     |if:a                       {: RESULT = a; :}
     |switch:a                   {: RESULT = a; :}
     |for:a                      {: RESULT = a; :}
@@ -389,27 +389,52 @@ instruccion ::= imprimir:a    {: RESULT = a; :}
     |do_while:a                 {: RESULT = a; :}
 ;
 
+void ::= RVOID tipofuncion:a   
+{: 
+    RESULT = a;
+    func.Funcion.codigo = a.toString();
+:}
+;
+
+tipofuncion ::= RMAIN PAR_IZQ PAR_DER LLAV_IZQ:x lista_instruccion:a LLAV_DER:y   
+{: 
+    String resultado = "";
+    resultado = "def main ():\n";
+
+    //arreglo 
+    String[] texto = a.toString().split("\n"); 
+    for (String linea : texto){
+        linea = "\t"+linea;
+        resultado += linea+"\n";
+    }
+    RESULT = resultado+"if__name__=\"__main__\":\n\tmain()";
+:}
+    |RDEFGLOBAL PAR_IZQ PAR_DER LLAV_IZQ lista_instruccion_grafica LLAV_DER     {: RESULT = ""; :}
+    |RGRAFIBARRAS PAR_IZQ PAR_DER LLAV_IZQ lista_graf_barras LLAV_DER           {: RESULT = ""; :}
+    |RGRAFIPIE PAR_IZQ PAR_DER LLAV_IZQ lista_graf_pie LLAV_DER              {: RESULT = ""; :}    
+;
+
 imprimir ::= RCONSOLA PUNTO RWRITE PAR_IZQ expresion:a PAR_DER PTCOMA 
 {:
-    RESULT = "\tprint(" + a + ")\n";
+    RESULT = "print(" + a + ")\n";
 :}
 ;
 
 asignacion ::= tipoDato ID:a IGUAL expresion:b PTCOMA
 {:
-    RESULT = "\t"+a + "=" + b+"\n";
+    RESULT = a + "=" + b+"\n";
 :}
     |ID:a IGUAL expresion:b PTCOMA
 {:
-    RESULT = "\t"+a + "=" + b+"\n";
+    RESULT = a + "=" + b+"\n";
 :}
     |ID:a IGUAL expresion:b
 {:
-    RESULT = "\t"+a + "=" + b;
+    RESULT = a + "=" + b;
 :}
     |tipoDato ID:a PTCOMA
 {:
-    RESULT = "\t"+a+"\n";
+    RESULT = a+"\n";
 :}
 ;
 
@@ -420,41 +445,83 @@ tipoDato ::= RINT
     |RBOOL
 ;
 
-void ::= RVOID tipofuncion:a   
-{: 
-    RESULT = a;
-    func.Funcion.codigo = a.toString();
-:}
-;
-
-tipofuncion ::= RMAIN PAR_IZQ PAR_DER LLAV_IZQ lista_instruccion:a LLAV_DER   
-{: 
-    RESULT = "def main ():\n" + a + "\nif__name__=\"__main__\":\n\tmain()";   
-:}
-    |RDEFGLOBAL PAR_IZQ PAR_DER LLAV_IZQ lista_instruccion_grafica LLAV_DER     {: RESULT = ""; :}
-    |RGRAFIBARRAS PAR_IZQ PAR_DER LLAV_IZQ lista_graf_barras LLAV_DER           {: RESULT = ""; :}
-    |RGRAFIPIE PAR_IZQ PAR_DER LLAV_IZQ lista_graf_pie LLAV_DER              {: RESULT = ""; :}    //PENDIENTEEEEEEEE
-;
-
-
-
 if ::= RIF PAR_IZQ expresion:a PAR_DER LLAV_IZQ lista_instruccion:b LLAV_DER
 {:
-    RESULT = "if "+a+":\n"+b ;
+    String resultado = "";
+    resultado = "if "+a+":\n";
+
+    //arreglo 
+    String[] texto = b.toString().split("\n"); 
+    for (String linea : texto){
+        linea = "\t"+linea;
+        resultado += linea+"\n";
+    }
+    RESULT = resultado;
 :}
     |RIF PAR_IZQ expresion:a PAR_DER LLAV_IZQ lista_instruccion:b LLAV_DER RELSE LLAV_IZQ lista_instruccion:c LLAV_DER
-{:
-    RESULT = "if "+a+":\n"+b+"\n\telse:\n"+c ;
+{:  
+    
+    String resultado = "";
+    resultado = "if "+a+":\n";
+
+    //arreglo 
+    String[] texto = b.toString().split("\n"); 
+    for (String linea : texto){
+        linea = "\t"+linea;
+        resultado += linea+"\n";
+    }
+    resultado += "else:\n";
+
+    //arreglo 
+    String[] texto1 = c.toString().split("\n"); 
+    for (String linea : texto1){
+        linea = "\t"+linea;
+        resultado += linea+"\n";
+    }
+
+    RESULT = resultado;
 :}
     |RIF PAR_IZQ expresion:a PAR_DER LLAV_IZQ lista_instruccion:b LLAV_DER RELSE if:c
 {:
-    RESULT = "if "+a+":\n"+b+"\n\tel"+c ;
+    String resultado = "";
+    resultado = "if "+a+":\n";
+
+    //arreglo 
+    String[] texto = b.toString().split("\n"); 
+    for (String linea : texto){
+        linea = "\t"+linea;
+        resultado += linea+"\n";
+    }
+    resultado += "el";
+
+    //arreglo 
+    String[] texto1 = c.toString().split("\n"); 
+    for (String linea : texto1){
+        if (linea.charAt(0) == 'i' || linea.charAt(0) == 'I') {
+            linea = linea;
+        }else{
+            linea = linea;
+        }
+        
+        resultado += linea+"\n";
+    }
+
+    RESULT = resultado;
 :}
 ;
 
 switch ::= RSWITCH PAR_IZQ ID:a PAR_DER LLAV_IZQ bloquescases:b LLAV_DER
 {:
-    RESULT = "\ndef switch(case,"+a.toString()+"):\nswitcher = {\n"+b +"}\n";
+    String resultado = "";
+    resultado = "def switch(case,"+a.toString()+"):\nswitcher = {\n";
+
+    //arreglo 
+    String[] texto = b.toString().split("\n"); 
+    for (String linea : texto){
+        linea = "\t"+linea;
+        resultado += linea+"\n";
+    }
+    RESULT = resultado+"}\n";
 :}
 ;
 
@@ -489,9 +556,17 @@ for ::= RFOR PAR_IZQ asignacion:a expresion:b PTCOMA condicion PAR_DER LLAV_IZQ 
     String ran_inicio = func.Funcion.numero(cadena);
     String ran_final = func.Funcion.numero(rango);
     String id = func.Funcion.id(cadena);
+    
+    String resultado = "";
+    resultado = "for "+id+" in range("+ran_inicio+","+ran_final+"):\n";
 
-    //rango
-    RESULT = "for "+id+" in range("+ran_inicio+","+ran_final+"):\n"+c ;
+    //arreglo 
+    String[] texto = c.toString().split("\n"); 
+    for (String linea : texto){
+        linea = "\t"+linea;
+        resultado += linea+"\n";
+    }
+    RESULT = resultado;
 :}
 ;
 
@@ -502,14 +577,36 @@ condicion ::= asignacion
 
 while ::= RWHILE PAR_IZQ expresion:a PAR_DER LLAV_IZQ lista_instruccion:b LLAV_DER 
 {:  
-    RESULT = "while "+a+" :\n"+b ;
+    String resultado = "";
+    resultado = "while "+a+" :\n";
+
+    //arreglo 
+    String[] texto = b.toString().split("\n"); 
+    for (String linea : texto){
+        linea = "\t"+linea;
+        resultado += linea+"\n";
+    }
+    RESULT = resultado;
 :}
 
 ;
 
 do_while ::= asignacion:a RDOWHILE LLAV_IZQ lista_instruccion:b LLAV_DER RWHILE PAR_IZQ expresion:c PAR_DER PTCOMA
-{:
-    RESULT = a+"while True:\n"+b+"if("+c+"):\n\tbreak" ;
+{:  
+    String resultado = "";
+    resultado = a+"while True:\n";
+
+    //arreglo 
+    String[] texto = b.toString().split("\n"); 
+    for (String linea : texto){
+        linea = "\t"+linea;
+        resultado += linea+"\n";
+    }
+    resultado += "if("+c+"):\n\tbreak";
+    
+    
+    RESULT = resultado;
+
 :}
 ;
 

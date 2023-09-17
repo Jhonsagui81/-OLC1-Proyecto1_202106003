@@ -6,6 +6,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 
 
@@ -30,7 +31,10 @@ public class Proyecto1 {
         analizadores("src/statpy/", "Lexer.jflex", "Parser.cup");
 //        System.out.println("Este es el codigo fuente: " +codigoFuente);
         System.out.println("----------------------------------------");
-        
+        String linea ="";
+//        func.Funcion.agregarTab(x);
+//        func.Funcion.EliminarTab(x);
+//?        func.Funcion.retornTabs();
         //Generacion analizadores 
         Interfaz.Pantalla Interfaz = new Interfaz.Pantalla();
         Interfaz.setVisible(true);         

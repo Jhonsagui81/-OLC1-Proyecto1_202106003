@@ -233,21 +233,15 @@ public class Pantalla extends javax.swing.JFrame {
          //Extraer codigo fuente 
         System.out.println("Inicia analisis statpy!!");
         String codigoFuente = jTextArea1.getText();
-        
-        //Recolectar nombre del json
-        //Mandaar nombre del archivo 
-//        proyecto1.Proyecto1.compilarjson(codigoFuente, nombreFile);
-        //Creacion de analizador 
-//        proyecto1.Proyecto1.analizadores("src/statpy/", "Lexer.jflex", "Parser.cup");
-        //proyecto1.Proyecto1.analizadores("src/statpy/", "Lexer.jflex", "Parser.cup");
-        
+
         //Ejecucion de analizadore 
         proyecto1.Proyecto1.analizarP(codigoFuente);
         
         System.out.println("------------------TTermino analisis sp --------------------------------");
+        //Muestra el codigo en la otra caja de texto 
         jTextArea2.setText(func.Funcion.codigo);
         System.out.println("-----------------Nuestra Dtos grafica --------------------------------");
-        func.Funcion.mostrarDataBarras();
+        //func.Funcion.mostrarDataBarras();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void assaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assaveActionPerformed
